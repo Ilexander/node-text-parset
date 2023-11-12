@@ -1,0 +1,21 @@
+{
+  "name": "imagetext-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon ./index.js localhost 3000",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7",
+    "nodemon": "^3.0.1",
+    "tesseract.js": "^4.1.1",
+    "ws": "^8.14.2"
+  },
+  "license": "ISC",
+  "author": ""
+}

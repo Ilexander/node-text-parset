@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket test</title>
+  </head>
+  <body>
+    <input id="uploader" type="file" onchange="onUpload" />
+    <div id="body"></div>
+  </body>
+
+  <script>
+    const IMAGE_UPLOADER = document.getElementById("uploader");
+    const MESSAGES_BODY = document.getElementById("body");
+    const CANVAS_ELEM = document.getElementById("canvas");
+    const socket = new WebSocket("ws://localhost:3000/host/socket");
+
+    const onUpload = (e) => {
+      const image = new Image();
+      image.crossOrigin = "anonymous";
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.height = image.naturalHeight;
+        canvas.width = image.naturalWidth;
+        ctx.drawImage(image, 0, 0);
+        const canvasImage = canvas.toDataURL("image/jpeg");
+        socket.send(JSON.stringify({ type: "image", body: canvasImage }));
+      };
+
+      image.src = URL.createObjectURL(e.target.files[0]);
+    };
+
+    IMAGE_UPLOADER.onchange = onUpload;
+
+    const createMessage = (text) => {
+      const textElement = document.createElement("div");
+      textElement.innerHTML = text;
+      MESSAGES_BODY.append(textElement);
+    };
+
+    socket.onmessage = (e) => {
+      createMessage(JSON.parse(e.data).text);
+    };
+
+  </script>
+</html>
